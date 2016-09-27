@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">轻笔记</string>
+    <string name="save_abel">保存当前笔记</string>
+    <string name="new_text">新建空白笔记</string>
+    <string name="open_label">打开旧的笔记</string>
+    <string name="adapter">adapter</string>
+    <string name="item">item</string>
+    <string name="position">position</string>
+    <string name="share_label">分享当前笔记</string>
+</resources>
