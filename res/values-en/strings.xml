@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Little Note</string>
+    <string name="save_abel">Save Current</string>
+    <string name="new_text">Create New Note</string>
+    <string name="open_label">Open Note</string>
+    <string name="adapter">adapter</string>
+    <string name="item">item</string>
+    <string name="position">position</string>
+    <string name="share_label">Share Current Note</string>
+    <string name="share_title">Share To</string>
+    <string name="close_button">Close</string>
+    <string name="cancle_button">Cancel</string>
+    <string name="conform_button">Conform</string>
+    <string name="delete_tips">Delete Conform: </string>
+    <string name="create_button">Create</string>
+    <string name="save_tips">Save Successfully</string>
+</resources>

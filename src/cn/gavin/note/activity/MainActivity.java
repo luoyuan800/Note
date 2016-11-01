@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import cn.gavin.note.R;
+import cn.gavin.note.StringAdapter;
 
 /**
  * Created by luoyuan on 2016/9/24.
@@ -71,7 +72,7 @@ public class MainActivity extends Activity {
         findViewById(R.id.share_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareSingleFile();
+                shareNoteIn();
             }
         });
         openNote();
@@ -80,21 +81,25 @@ public class MainActivity extends Activity {
     public void save() {
         String text = editText.getText().toString();
         try {
-            if(!text.isEmpty()) {
+            if(!text.trim().isEmpty()) {
                 if(noteName == null){
-                    noteName = new Date().toString().replaceAll(" ", "_").replaceAll(":", "_").replaceAll("\\+", "_");
+                    noteName = buildEmptyName();
                 }
                 FileWriter writer = new FileWriter(Environment.getExternalStorageDirectory() + "/littlenotes/" + noteName, false);
                 writer.write(text);
                 writer.flush();
                 writer.close();
-                Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.save_tips), Toast.LENGTH_SHORT).show();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String buildEmptyName() {
+        return new Date().toString().replaceAll(" ", "_").replaceAll(":", "_").replaceAll("\\+", "_");
     }
 
     public void setFileName(String fileName) {
@@ -147,18 +152,18 @@ public class MainActivity extends Activity {
         final EditText titleText = new EditText(this);
         dialog.setView(titleText);
         titleText.setHint("输入笔记名字");
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "创建", new DialogInterface.OnClickListener() {
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.create_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 String text = titleText.getText().toString();
                 if (text.isEmpty()) {
-                    text = new Date().toString().replaceAll(" ", "_").replaceAll(":", "_");
+                    text = buildEmptyName();
                 }
                 setFileName(text);
             }
         });
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancle_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -194,8 +199,8 @@ public class MainActivity extends Activity {
                 final String file = v.getTag(R.string.item).toString();
                 if (!file.isEmpty()) {
                     final AlertDialog deleteDialog = new AlertDialog.Builder(MainActivity.this).create();
-                    deleteDialog.setMessage("确认删除笔记：" + file);
-                    deleteDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确认", new DialogInterface.OnClickListener() {
+                    deleteDialog.setMessage(getString(R.string.delete_tips) + file);
+                    deleteDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.conform_button), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             deleteDialog.dismiss();
@@ -205,7 +210,7 @@ public class MainActivity extends Activity {
                             }
                         }
                     });
-                    deleteDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                    deleteDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancle_button), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             deleteDialog.dismiss();
@@ -217,7 +222,7 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "关闭", new DialogInterface.OnClickListener() {
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.close_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (noteName == null && adapter.getData()!=null && adapter.getData().size() > 0) {
@@ -231,7 +236,7 @@ public class MainActivity extends Activity {
         dialog.show();
     }
 
-    //分享单张图片
+    //分享文件
     public void shareSingleFile() {
         String imagePath = Environment.getExternalStorageDirectory() + "/littlenotes/" +  noteName;
         //由文件得到uri
@@ -240,7 +245,16 @@ public class MainActivity extends Activity {
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.setType("text/*");
-        startActivity(Intent.createChooser(shareIntent, "分享到"));
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
+    }
+    //分享文本
+    public void shareNoteIn() {
+        String value = editText.getText().toString();
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, value);
+        shareIntent.setType("text/*");
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
     }
 
 }

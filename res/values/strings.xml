@@ -8,4 +8,11 @@
     <string name="item">item</string>
     <string name="position">position</string>
     <string name="share_label">分享当前笔记</string>
+    <string name="share_title">分享到</string>
+    <string name="close_button">关闭</string>
+    <string name="cancle_button">取消</string>
+    <string name="conform_button">确认</string>
+    <string name="delete_tips">确认删除笔记：</string>
+    <string name="create_button">创建</string>
+    <string name="save_tips">保存成功</string>
 </resources>

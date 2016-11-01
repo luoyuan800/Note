@@ -1,4 +1,4 @@
-package cn.gavin.note.activity;
+package cn.gavin.note;
 
 import android.text.Html;
 import android.view.View;
