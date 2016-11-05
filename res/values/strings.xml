@@ -15,4 +15,6 @@
     <string name="delete_tips">确认删除笔记：</string>
     <string name="create_button">创建</string>
     <string name="save_tips">保存成功</string>
+    <string name="help_title">引导</string>
+    <string name="create_tips">输入笔记名字</string>
 </resources>

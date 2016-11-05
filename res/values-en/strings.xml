@@ -15,4 +15,6 @@
     <string name="delete_tips">Delete Conform: </string>
     <string name="create_button">Create</string>
     <string name="save_tips">Save Successfully</string>
+    <string name="help_title">Guide</string>
+    <string name="create_tips">Type Note Name</string>
 </resources>

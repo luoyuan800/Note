@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,6 +35,17 @@ public class MainActivity extends Activity {
     private EditText editText;
     private String noteName;
     private TextView title;
+
+    private void showHelp() {
+        SharedPreferences preference = getSharedPreferences("main_config", MODE_PRIVATE);
+        if(preference.getBoolean("first", true)){
+            Intent help = new Intent(this, HelpActivity.class);
+            startActivity(help);
+            SharedPreferences.Editor editor = preference.edit();
+            editor.putBoolean("first", false);
+            editor.apply();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +88,14 @@ public class MainActivity extends Activity {
             }
         });
         openNote();
+        showHelp();
     }
 
     public void save() {
         String text = editText.getText().toString();
         try {
-            if(!text.trim().isEmpty()) {
-                if(noteName == null){
+            if (!text.trim().isEmpty()) {
+                if (noteName == null) {
                     noteName = buildEmptyName();
                 }
                 FileWriter writer = new FileWriter(Environment.getExternalStorageDirectory() + "/littlenotes/" + noteName, false);
@@ -111,7 +124,7 @@ public class MainActivity extends Activity {
                 this.noteName = fileName;
                 loadNote(fileName);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -128,7 +141,7 @@ public class MainActivity extends Activity {
                 while (s != null) {
                     sb.append(s);
                     s = reader.readLine();
-                    if(s!=null){
+                    if (s != null) {
                         sb.append("\n");
                     }
                 }
@@ -151,7 +164,7 @@ public class MainActivity extends Activity {
         AlertDialog dialog = new AlertDialog.Builder(this).create();
         final EditText titleText = new EditText(this);
         dialog.setView(titleText);
-        titleText.setHint("输入笔记名字");
+        titleText.setHint(getString(R.string.create_tips));
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.create_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -171,11 +184,13 @@ public class MainActivity extends Activity {
         });
         dialog.show();
     }
+
     @Override
     protected void onDestroy() {
         save();
         super.onDestroy();
     }
+
     public void openNote() {
         final AlertDialog dialog = new AlertDialog.Builder(this).create();
         File root = new File(Environment.getExternalStorageDirectory() + "/littlenotes/");
@@ -216,7 +231,7 @@ public class MainActivity extends Activity {
                             deleteDialog.dismiss();
                         }
                     });
-                   deleteDialog.show();
+                    deleteDialog.show();
 
                 }
                 return false;
@@ -225,9 +240,9 @@ public class MainActivity extends Activity {
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.close_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (noteName == null && adapter.getData()!=null && adapter.getData().size() > 0) {
+                if (noteName == null && adapter.getData() != null && adapter.getData().size() > 0) {
                     setFileName(adapter.getItem(0));
-                }else if(noteName ==  null){
+                } else if (noteName == null) {
                     setFileName(new Date().toString().replaceAll(" ", "_").replaceAll(":", "_"));
                 }
                 dialog.dismiss();
@@ -238,7 +253,7 @@ public class MainActivity extends Activity {
 
     //分享文件
     public void shareSingleFile() {
-        String imagePath = Environment.getExternalStorageDirectory() + "/littlenotes/" +  noteName;
+        String imagePath = Environment.getExternalStorageDirectory() + "/littlenotes/" + noteName;
         //由文件得到uri
         Uri imageUri = Uri.fromFile(new File(imagePath));
         Intent shareIntent = new Intent();
@@ -247,6 +262,7 @@ public class MainActivity extends Activity {
         shareIntent.setType("text/*");
         startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
     }
+
     //分享文本
     public void shareNoteIn() {
         String value = editText.getText().toString();
